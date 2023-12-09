@@ -1,5 +1,6 @@
 import 'package:bloc_internet_connectivity/bloc/internetbloc.dart';
 import 'package:bloc_internet_connectivity/bloc/states/internet_states.dart';
+import 'package:bloc_internet_connectivity/cubit/internetCubit.dart';
 import 'package:bloc_internet_connectivity/widgets/states_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,15 +14,15 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Internet Connectivity'),
       ),
       body: Center(
-        child: BlocConsumer<InternetBloc, InternetState>(
+        child: BlocConsumer<InternetCubit, InternetState>(
           builder: (context, state) {
-            if (state is InternetConnectedState) {
+            if (state == InternetState.connected) {
               return const ShowInternetStatus(
                 title: 'Internet Connected',
                 subTitle: 'Please proceed with your work',
                 icon: Icons.wifi,
               );
-            } else if (state is InternetLostState) {
+            } else if (state == InternetState.disConnected) {
               return const ShowInternetStatus(
                 title: 'No Internet Connection',
                 subTitle:
@@ -37,14 +38,14 @@ class HomeScreen extends StatelessWidget {
             }
           },
           listener: (context, state) {
-            if (state is InternetConnectedState) {
+            if (state ==InternetState.connected) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Internet Connected'),
                   backgroundColor: Colors.orange,
                 ),
               );
-            } else if (state is InternetLostState) {
+            } else if (state ==InternetState.disConnected) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('No Internet Connection'),
